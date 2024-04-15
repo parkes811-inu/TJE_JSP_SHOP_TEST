@@ -13,3 +13,5 @@ CREATE TABLE `order` (
   `phone` varchar(20) DEFAULT NULL COMMENT '비회원 전화번호',
   PRIMARY KEY (`order_no`)
 ) COMMENT='주문';
+
+

@@ -21,8 +21,6 @@ public class JDBConnection {
 	// 기본 생성자
 	public JDBConnection() {
 		
-		
-		
 		// JDBC 드라이버 로드
 		// MySQL
 		try {
@@ -63,9 +61,9 @@ public class JDBConnection {
 		
 	}
 	
-//	public static void main(String[] args) {
-//		JDBConnection jdbc = new JDBConnection();
-//	}
+	public static void main(String[] args) {
+		JDBConnection jdbc = new JDBConnection();
+	}
 
 }
 
