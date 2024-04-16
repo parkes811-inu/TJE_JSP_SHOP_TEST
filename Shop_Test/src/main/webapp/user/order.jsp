@@ -1,3 +1,4 @@
+<%@page import="shop.dto.Order"%>
 <%@page import="shop.dao.OrderRepository"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="shop.dto.Product"%>
@@ -17,12 +18,20 @@
 	<% 
 
 		// ...
-	
-	
+		String root = request.getContextPath();
+		String loginId = (String) session.getAttribute("loginId");
+
+		boolean login = false;
+		if( loginId != null && !loginId.isEmpty() ) {
+			login = true;
+		}
+		
+		UserRepository userDAO = new UserRepository();
+		User loginUser = userDAO.getUserById(loginId);	
+		
 		// 주문 내역 목록을 세션에서 가져오기
 		
 		// 회원인 경우
-		
 		
 	%>
 	
@@ -91,6 +100,12 @@
 						</div>
 					<% } %>
 					</form>
+				<% 
+					// 위에 폼에서 먼저 번호로 조회하고, 세션 등록?
+					// orderPhone은 비회원 조회 시 등록된 세션을 가져와서 사용 해야 될듯??
+					String orderPhone = (String) session.getAttribute("orderPhone");
+					String orderPw = (String) session.getAttribute("orderPw");
+				%>
 				<% if( login || ( orderPhone != null && !orderPhone.isEmpty() ) ) { %>
 				<!-- 주문 내역 목록 -->
 				<table class="table table-striped table-hover table-bordered text-center align-middle">
@@ -105,7 +120,22 @@
 						</tr>
 					</thead>
 					<tbody>
-						<%
+						<%	
+							OrderRepository orderDao = new OrderRepository();
+							
+							// To-do : 2024-04-16 : list 조회를 어떻게 하라는지 이해가 안감...
+							int orderCount = 0;
+							List<Product> orderList = new ArrayList<Product>();
+							
+								if(login) {
+									 orderList = orderDao.list(loginId);
+									 orderCount = orderDao.list(loginId).size();		
+								}
+								else {
+									orderList = orderDao.list(orderPhone, orderPw);
+									orderCount = orderDao.list(orderPhone, orderPw).size();		
+								}
+							
 							int sum = 0;
 							for(int i = 0 ; i < orderCount ; i++) {
 								Product product = orderList.get(i);
@@ -123,6 +153,7 @@
 						<%
 							}
 						%>
+						
 					</tbody>
 					<tfoot>
 						<%
@@ -147,17 +178,10 @@
 				
 				<% } %>
 			</div>
-			
 			<jsp:include page="/layout/footer.jsp" />
 		</div>
 	</div>
-	
-	
-	
 	<jsp:include page="/layout/script.jsp" />
-	
-	
-
 	<script>
 		
 		let form = document.updateForm

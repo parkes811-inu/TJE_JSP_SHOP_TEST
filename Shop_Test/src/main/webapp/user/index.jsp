@@ -10,8 +10,13 @@
 	<jsp:include page="/layout/meta.jsp" /> <jsp:include page="/layout/link.jsp" />
 </head>
 <%
-	String root = request.getContextPath();
-	String loginId = request.getParameter("loginId");
+	String root = request.getContextPath(); 
+	String loginId = (String) session.getAttribute("loginId");	
+	
+	boolean login = false;
+	if( loginId != null && !loginId.isEmpty() ) {
+		login = true;
+	}
 %>
 <body>   
 	
@@ -22,10 +27,10 @@
 			<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary">
 			    <ul class="nav nav-pills flex-column mb-auto">
 			      <!-- 로그인 시 -->
-			      <% if( loginId == null ) { %>
+			      <% if( login ) { %>
 			      	<li>
 			        <a href="<%= root %>/user/index.jsp" class="nav-link link-body-emphasis">
-			          마이페이지
+			          마이 페이지
 			        </a>
 			      	</li>
 			      	<li>

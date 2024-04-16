@@ -91,9 +91,10 @@ public class OrderRepository extends JDBConnection {
 				
 	            Product product = new Product();
 	            product.setOrderNo(rs.getInt("order_no"));
-	            product.setName(rs.getString("name"));
-	            product.setUnitPrice(rs.getInt("price"));
-
+	            // product.setName(rs.getString("name"));
+	            product.setUnitPrice(rs.getInt("total_price"));
+	            
+	            //String sql2 = ""
 	        	
 				productList.add(product); 
 			}
@@ -118,7 +119,7 @@ public class OrderRepository extends JDBConnection {
 		String sql = " SELECT * "
 					+ " FROM `order` "
 					+ " WHERE phone = ? "
-					+ " ADN order_pw = ? ";
+					+ " AND order_pw = ? ";
 		
 		try {
 			psmt = con.prepareStatement(sql);
@@ -131,8 +132,8 @@ public class OrderRepository extends JDBConnection {
 				
 	            Product product = new Product();
 	            product.setOrderNo(rs.getInt("order_no"));
-	            product.setName(rs.getString("name"));
-	            product.setUnitPrice(rs.getInt("price"));
+	            // product.setName(rs.getString("name"));
+	            product.setUnitPrice(rs.getInt("total_price"));
 
 	        	
 				productList.add(product); 
@@ -141,10 +142,7 @@ public class OrderRepository extends JDBConnection {
 			e.printStackTrace();
 			System.err.println("주문 목록 조회 중 에러가 발생하였습니다.");
 		}
-				
 		return productList;
-		
-		
 	}
 	
 }

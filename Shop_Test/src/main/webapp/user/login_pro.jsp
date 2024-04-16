@@ -71,7 +71,7 @@
 	
 	if (loginUser != null) {
 	    session.setAttribute("loginId", id);  // 로그인 성공 시 세션에 ID 저장
-	    response.sendRedirect("complete.jsp?msg=1");  // 성공 페이지로 리다이렉션
+	    response.sendRedirect("complete.jsp?msg=0");  // 성공 페이지로 리다이렉션
 	} else {
     	response.sendRedirect("login.jsp?error=0");  // 로그인 실패 시 에러 코드와 함께 리다이렉션
 	}

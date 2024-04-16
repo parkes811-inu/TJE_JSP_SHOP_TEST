@@ -96,7 +96,14 @@ public class UserRepository extends JDBConnection {
 	        if(rs.next()) {
 	        	user.setId(rs.getString("id"));
 	            user.setPassword(rs.getString("password"));
-	            user.setAddress(sql);
+	            user.setName(rs.getString("name"));
+	            user.setGender(rs.getString("gender"));
+	            user.setBirth(rs.getString("birth"));
+	            user.setMail(rs.getString("mail"));
+	            user.setPhone(rs.getString("phone"));
+	            user.setAddress(rs.getString("address"));
+	            user.setRegistDay(rs.getString("regist_day"));
+	            
 	    		return user;
 	        }
 		} catch (SQLException e) {
@@ -115,22 +122,28 @@ public class UserRepository extends JDBConnection {
 	public int update(User user) {
 		int result = 0;
 		
-		String sql = " UPDATE `persistent_logins` "
-				   + " SET token = ?"
-				   + " AND upd_date = sysdate() "
-				   + " WHERE id = ? ";
-		// 토큰 발행
-		String token = UUID.randomUUID().toString();
-		
+		String sql = " UPDATE `user` "
+				   + " SET id = ?, gender = ?, birth = ? "
+				   + " , mail = ?, phone = ?, address = ? "
+				   + " WHERE id = ? AND gender = ?  AND phone = ? ";
 		try {
 			psmt = con.prepareStatement(sql);
-			psmt.setString(1, token);
-			psmt.setString(2, user.getId());
+			// 업데이트 될 값들
+			psmt.setString(1, user.getId());
+			psmt.setString(2, user.getGender());
+			psmt.setString(3, user.getBirth());
+			psmt.setString(4, user.getMail());
+			psmt.setString(5, user.getPhone());
+			psmt.setString(6, user.getAddress());
+			// user 테이블에서 where 조건으로 찾는 값들
+			psmt.setString(7, user.getId());
+			psmt.setString(8, user.getGender());
+			psmt.setString(9, user.getPhone());
 			
 			result = psmt.executeUpdate();
 			
 		}catch (SQLException e) {
-			System.err.println("자동 로그인 정보 수정 중, 에러 발생!");
+			System.err.println("회원 정보 수정 중, 에러 발생!");
 			e.printStackTrace();
 		}
 		

@@ -56,24 +56,24 @@
     
     
     // User 객체 생성 및 값 설정
-    User newUser = new User();
-    newUser.setId(id);
-    newUser.setPassword(pw);
-    newUser.setName(name);
-    newUser.setGender(gender);
-    newUser.setBirth(year + "-" + month + "-" + day);
-    newUser.setMail(email);
-    newUser.setPhone(phone);
-    newUser.setAddress(address);
+    User user = new User();
+    user.setId(id);
+    user.setPassword(pw);
+    user.setName(name);
+    user.setGender(gender);
+    user.setBirth(year + "-" + month + "-" + day);
+    user.setMail(email);
+    user.setPhone(phone);
+    user.setAddress(address);
 
     // 데이터베이스 연결 및 사용자 추가 로직
     UserRepository userDAO = new UserRepository();
-    int result = userDAO.insert(newUser);
+    int result = userDAO.insert(user);
 
     // 결과에 따른 응답 페이지 리다이렉션
     if (result > 0) {
         // 회원 가입 성공
-        response.sendRedirect("complete.jsp?msg=success");
+        response.sendRedirect("complete.jsp?msg=1");
     } else {
         // 회원 가입 실패
         out.println("<script>alert('회원 가입 실패. 다시 시도해 주세요.'); history.back();</script>");
