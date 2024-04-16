@@ -49,8 +49,9 @@ public class LoginFilter extends HttpFilter implements Filter {
     private void autoLogin(String token, HttpServletRequest request) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-
-        try {
+        Connection con = null;
+        
+		try {
             String sql = "SELECT login_id FROM persistent_logins WHERE token = ?";
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, token);

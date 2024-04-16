@@ -72,9 +72,10 @@ public class OrderRepository extends JDBConnection {
 	 * 주문 내역 조회 - 회원
 	 * @param userId
 	 * @return
+	 * 주문번호, 상품명, 가격, 수량, 소개, 비고 
 	 */
 	public List<Product> list(String userId) {
-		List<Product> product = new ArrayList<>();
+		List<Product> productList = new ArrayList<>();
 		
 		String sql = " SELECT * "
 					+ " FROM `order` "
@@ -87,16 +88,21 @@ public class OrderRepository extends JDBConnection {
 			rs = psmt.executeQuery();
 			
 			while(rs.next()) {
-				product.set
+				
+	            Product product = new Product();
+	            product.setOrderNo(rs.getInt("order_no"));
+	            product.setName(rs.getString("name"));
+	            product.setUnitPrice(rs.getInt("price"));
+
+	        	
+				productList.add(product); 
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.err.println("주문 목록 조회 중 에러가 발생하였습니다.");
 		}
 				
-		
-		
-		return product;
+		return productList;
 	}
 	
 	/**
@@ -106,6 +112,37 @@ public class OrderRepository extends JDBConnection {
 	 * @return
 	 */
 	public List<Product> list(String phone, String orderPw) {
+		
+	List<Product> productList = new ArrayList<>();
+		
+		String sql = " SELECT * "
+					+ " FROM `order` "
+					+ " WHERE phone = ? "
+					+ " ADN order_pw = ? ";
+		
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setString(1, phone);
+			psmt.setString(2, orderPw);
+			
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				
+	            Product product = new Product();
+	            product.setOrderNo(rs.getInt("order_no"));
+	            product.setName(rs.getString("name"));
+	            product.setUnitPrice(rs.getInt("price"));
+
+	        	
+				productList.add(product); 
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("주문 목록 조회 중 에러가 발생하였습니다.");
+		}
+				
+		return productList;
 		
 		
 	}

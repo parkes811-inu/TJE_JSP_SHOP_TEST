@@ -22,6 +22,21 @@
 		}
 		
 		// 아이디 저장 쿠키 가져오기
+		// 아이디 저장
+		String rememberId = "";
+		String userId = "";
+		Cookie[] cookies = request.getCookies();
+		if( cookies != null ) {
+			for( int i = 0 ; i < cookies.length ; i++ ) {
+				Cookie cookie = cookies[i];
+				String cookieName = cookie.getName();
+				String cookieValue = URLDecoder.decode( cookie.getValue(), "UTF-8" );
+				switch(cookieName) {
+					case "userId"		: userId = cookieValue; break; 
+					case "rememberId"	: rememberId = cookieValue; break; 
+				}
+			}
+		}
 		
 		
 	%>
@@ -35,7 +50,7 @@
 	  <form action="login_pro.jsp" method="post">
 	    <div class="form-floating">
 	      <input type="text" class="form-control" id="floatingInput" name="id" 
-	      		 value="<%= loginId %>" placeholder="아이디" autofocus>
+	      		 value="<%= userId %>" placeholder="아이디" autofocus>
 	      <label for="floatingInput">아이디</label>
 	    </div>
 	    <div class="form-floating">

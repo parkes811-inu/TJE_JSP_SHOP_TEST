@@ -15,7 +15,28 @@ public class UserRepository extends JDBConnection {
 	 * @return
 	 */
 	public int insert(User user) {
+		int result = 0;
 		
+		String sql = " INSERT INTO `user` VALUES "
+					+ " (?, ?, ?, ?, ?, ?, ?, ?, SYSDATE()) ";
+		
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setString( 1, user.getId() );
+			psmt.setString( 2, user.getPassword() );
+			psmt.setString( 3, user.getName() );
+			psmt.setString( 4, user.getGender() );
+			psmt.setString( 5, user.getBirth() );
+			psmt.setString( 6, user.getMail() );
+			psmt.setString( 7, user.getPhone() );
+			psmt.setString( 8, user.getAddress() );
+			
+			result = psmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("로그인 시, 예외 발생");
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	
@@ -26,7 +47,28 @@ public class UserRepository extends JDBConnection {
 	 * @return
 	 */
 	public User login(String id, String pw) {
+		User user = new User();
 		
+		String sql = " SELECT * "
+				   + " FROM `user` "
+				   + " WHERE id = ? AND password = ? ";
+		
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setString( 1, id );
+			psmt.setString( 2, pw );
+			rs = psmt.executeQuery();
+					
+			if( rs.next() ) {
+				user.setId( rs.getString("id") );
+				user.setPassword( rs.getString("password") );
+				return user;
+			}
+		} catch(SQLException e) {
+			System.err.println("로그인 시, 예외 발생");
+			e.printStackTrace();
+		}
+		return null;		
 	}
 	
 	
@@ -39,7 +81,29 @@ public class UserRepository extends JDBConnection {
 	 * @return
 	 */
 	public User getUserById(String id) {
+		User user = new User();
 		
+		String sql = " SELECT *"
+					+ " FROM `user` "
+					+ " WHERE id = ? ";
+		
+		try {
+			psmt = con.prepareStatement(sql);
+	        psmt.setString(1, id);
+
+	        rs = psmt.executeQuery();
+	        
+	        if(rs.next()) {
+	        	user.setId(rs.getString("id"));
+	            user.setPassword(rs.getString("password"));
+	            user.setAddress(sql);
+	    		return user;
+	        }
+		} catch (SQLException e) {
+			System.err.println("자동 로그인 정보 수정 중, 에러 발생!");
+			e.printStackTrace();
+		}
+		return null;		
 	}
 	
 	
@@ -49,7 +113,28 @@ public class UserRepository extends JDBConnection {
 	 * @return
 	 */
 	public int update(User user) {
+		int result = 0;
 		
+		String sql = " UPDATE `persistent_logins` "
+				   + " SET token = ?"
+				   + " AND upd_date = sysdate() "
+				   + " WHERE id = ? ";
+		// 토큰 발행
+		String token = UUID.randomUUID().toString();
+		
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setString(1, token);
+			psmt.setString(2, user.getId());
+			
+			result = psmt.executeUpdate();
+			
+		}catch (SQLException e) {
+			System.err.println("자동 로그인 정보 수정 중, 에러 발생!");
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 
@@ -59,7 +144,20 @@ public class UserRepository extends JDBConnection {
 	 * @return
 	 */
 	public int delete(String id) {
+		int result = 0;
+		String sql = " DELETE FROM `user` "
+					+ " WHERE id = ? ";
 		
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setString(1, id);
+			
+			result = psmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("회원 삭제 중, 에러 발생!");
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	/**
