@@ -18,12 +18,23 @@
 <body>   
 	<jsp:include page="/layout/header.jsp" />
 	<div class="px-4 py-5 my-5 text-center">
-		<h1 class="display-5 fw-bold text-body-emphasis">상품 등록</h1>
+		<h1 class="display-5 fw-bold text-body-emphasis">장바구니</h1>
 		<div class="col-lg-6 mx-auto">
-			<p class="lead mb-4">Shop 쇼핑몰 입니다.</p>
+			<p class="lead mb-4">장바구니 목록 입니다.</p>
 			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 				
 				<!--  미니 프로젝트 했던거 사장님 상품 추가 코드 보면 될듯? -->
+				<table>
+					<tr>
+						<td>
+							안녕 : <%=root %>
+						</td>
+						
+						<td>안녕</td>
+						<td>안녕</td>
+						<td>안녕</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</div>

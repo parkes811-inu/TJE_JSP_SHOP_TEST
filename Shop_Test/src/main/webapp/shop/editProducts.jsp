@@ -48,7 +48,7 @@
 									<p class="card-price text-end" style="font-weight: bold;">￦ ${product.unitPrice}</p>
 			                        
 			                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-										<a href="<%= root %>/shop/update.jsp" class="btn btn-primary btn-sm px-2 gap-2">수정</a>
+										<a href="<%= root %>/shop/update.jsp?productId=${product.productId}" class="btn btn-primary btn-sm px-2 gap-2">수정</a>
 										<form action="<%= root %>/shop/delete_pro.jsp" method="POST">
 										  <input type="hidden" name="productId" value="${ product.productId }">
 										  <button type="submit" class="btn btn-danger btn-sm px-2 gap-2">삭제</button>
