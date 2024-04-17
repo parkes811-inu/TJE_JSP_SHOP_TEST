@@ -13,8 +13,7 @@
 	<title>Products</title>
 	<jsp:include page="/layout/meta.jsp" />
 	<jsp:include page="/layout/link.jsp" />
-	<jsp:include page="/layout/footer.jsp" />
-	<jsp:include page="/layout/script.jsp" />
+
 </head>
 <% 
 	String root = request.getContextPath(); 
@@ -45,14 +44,13 @@
 			                <div class="card" style="width: 14rem;">
 			                    <img class="card-img-top" src="<%= request.getContextPath() %>${product.file}" alt="${product.name}">
 			                    <div class="card-body">
-			                        <h5 class="card-title">${product.name}</h5>
+									<h5 class="card-title" style="font-weight: bold;">${product.name}</h5>
 			                        <p class="card-text">${product.description}</p>
-									<p class="card-price text-end">￦ ${product.unitPrice}</p>
+									<p class="card-price text-end" style="font-weight: bold;">￦ ${product.unitPrice}</p>
 			                        
 			                        <div class="d-flex justify-content-between mt-1 mb-1">
 										<a href="cart.jsp" class="btn btn-white btn-sm text-primary border-primary">🛒</a>
-										<button class="btn btn-white btn-sm text-primary border-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-   										 onclick="fillModal(${product.unitPrice}, '${product.description}')">상세 정보</button>
+										<a href="product.jsp?productId=${product.productId}" class="btn btn-white btn-sm text-primary border-primary">상세 정보</a>
 									</div>	
 			                    </div>
 			                </div>
@@ -62,31 +60,7 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLabel">상세 정보</h5>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	      </div>
-	      <div class="modal-body">
-	        <p id="modalPrice"></p>
-    		<p id="modalDescription"></p> 
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<script>
-    function fillModal(unitPrice, description) {
-        // 모달 내용을 채우는 작업
-        document.getElementById('modalPrice').innerText = '￦ ' + unitPrice;
-        document.getElementById('modalDescription').innerText = description;
-    }
-	</script>
-
+	<jsp:include page="/layout/footer.jsp" />
+	<jsp:include page="/layout/script.jsp" />
 </body>
 </html>
