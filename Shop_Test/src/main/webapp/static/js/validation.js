@@ -9,7 +9,7 @@ function checkProduct() {
 	let unitsInStock = form.unitsInStock
 	
 	let msg = ''
-	
+
 	// 상품아이디 체크
 	// - P숫자 6자리
 	let productIdCheck = /^P[0-9]{6}$/

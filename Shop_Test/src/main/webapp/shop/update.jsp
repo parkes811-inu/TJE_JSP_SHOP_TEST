@@ -35,7 +35,7 @@
 	        <br><br><br>
 			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 				<!--  미니 프로젝트 했던거 사장님 상품 추가 코드 보면 될듯? -->
-				<form action="update_pro.jsp" method="post" enctype="multipart/form-data">
+				<form action="update_pro.jsp" name="product" method="post" onsubmit="return checkProduct()" enctype="multipart/form-data">
 					<div class="input-group mb-3 row">
 						<label class="input-group-text col-md-4" id="file">상품 이미지</label>
 						<input type="file" class="form-control col-md-8" 
@@ -44,37 +44,37 @@
 					<div class="input-group mb-3 row">
 						<label class="input-group-text col-md-4" id="productId">상품 코드</label>
 						<input type="text" class="form-control col-md-8" 
-							   name="productId" value="<%= product.getProductId() %>">
+							   name="productId" value="<%= product.getProductId() %>" required >
 					</div>
 					<div class="input-group mb-3 row">
 						<label class="input-group-text col-md-4" id="name">상품명</label>
 						<input type="text" class="form-control col-md-8" 
-							   name="name" value="<%= product.getName() %>">
+							   name="name" value="<%= product.getName() %>" required >
 					</div>
 					<div class="input-group mb-3 row">
 						<label class="input-group-text col-md-4" id="unitPrice">가격</label>
 						<input type="text" class="form-control col-md-8" 
-							   name="unitPrice" value="<%= product.getUnitPrice() %>">
+							   name="unitPrice" value="<%= product.getUnitPrice() %>" required >
 					</div>
 					<div class="input-group mb-3 row">
 						<label class="input-group-text row-md-4 rounded-end" id="description">상세 정보</label>
 						<input type="text" class="form-control form-control-lg col-md-12 rounded-start" style="height: 100px;"
-							   name="description" value="<%= product.getDescription() %>">
+							   name="description" value="<%= product.getDescription() %>" required >
 					</div>
 					<div class="input-group mb-3 row">
 						<label class="input-group-text col-md-4" id="manufacturer">제조사</label>
 						<input type="text" class="form-control col-md-8" 
-							   name="manufacturer" value="<%= product.getManufacturer() %>">
+							   name="manufacturer" value="<%= product.getManufacturer() %>" required >
 					</div>
 					<div class="input-group mb-3 row">
 						<label class="input-group-text col-md-4" id="category">분류</label>
 						<input type="text" class="form-control col-md-8" 
-							   name="category" value="<%= product.getCategory() %>">
+							   name="category" value="<%= product.getCategory() %>"required >
 					</div>
 					<div class="input-group mb-3 row">
 						<label class="input-group-text col-md-4" id="unitsInStock">재고 수</label>
 						<input type="text" class="form-control col-md-8" 
-							   name="unitsInStock" value="<%= product.getUnitsInStock() %>">
+							   name="unitsInStock" value="<%= product.getUnitsInStock() %>" required >
 					</div>
 				   <div class="input-group mb-3 row">
 					<div class="col-md-4 p-0">
@@ -83,17 +83,21 @@
 					<div class="col-md-8 d-flex align-items-center">
 						<div class="radio-box d-flex small">
 							<div class="radio-item mx-3">
-						    <input type="radio" class="form-check-input" name="condition" value="new" id="newProduct"> 
+						    <!-- 이전 상태 값을 받아와서 라디오 버튼에 체크 상태를 활성화 하기 위해 -->
+						    <input type="radio" class="form-check-input" name="condition" value="NEW" id="newProduct" required
+	                        <%= (product.getCondition() != null && product.getCondition().equals("NEW")) ? "checked" : "" %> >  
 						    <label for="newProduct" class="small">신규 제품</label>
 						</div>
 						
-						<div class="radio-item mx-3">
-						    <input type="radio" class="form-check-input" name="condition" value="used" id="usedProduct"> 
+						<div class="radio-item mx-3" >
+						    <input type="radio" class="form-check-input" name="condition" value="USED" id="usedProduct"
+   	                        <%= (product.getCondition() != null && product.getCondition().equals("USED")) ? "checked" : "" %> >  
 						    <label for="usedProduct" class="small">중고 제품</label>
 						</div>
 						
 						<div class="radio-item mx-3">
-						    <input type="radio" class="form-check-input" name="condition" value="recycled" id="recycledProduct"> 
+						    <input type="radio" class="form-check-input" name="condition" value="RECYCLED" id="recycledProduct"
+   	                        <%= (product.getCondition() != null && product.getCondition().equals("RECYCLED")) ? "checked" : "" %> >  
 						    <label for="recycledProduct" class="small">재생 제품</label>
 						</div>
 						</div>

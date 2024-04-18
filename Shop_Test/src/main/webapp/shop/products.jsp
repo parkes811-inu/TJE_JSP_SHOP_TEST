@@ -64,7 +64,7 @@
 									<p class="card-price text-end" style="font-weight: bold;">￦ ${product.unitPrice}</p>
 			                        
 			                        <div class="d-flex justify-content-between mt-1 mb-1">
-										<a href="cart.jsp" class="btn btn-white btn-sm text-primary border-primary">🛒</a>
+										<a href="cart.jsp?productId=${product.productId}" class="btn btn-white btn-sm text-primary border-primary">🛒</a>
 										<a href="product.jsp?productId=${product.productId}" class="btn btn-white btn-sm text-primary border-primary">상세 정보</a>
 									</div>	
 			                    </div>

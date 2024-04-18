@@ -74,33 +74,16 @@
 	product.setUnitsInStock(unitsInStock);
 	product.setCondition(condition);
     product.setFile("/static/img/" + fileName);
-
+    
 	ProductRepository productDao = new ProductRepository();
-	
-    // 상품 이미지를 업로드하지 않고, 기존의 것을 사용해야 하는 경우
-	// 기존에 사용하던 이미지 경로를 조회
-	if (fileName == "") {
-	    // 데이터베이스에서 기존 상품 정보를 조회
-	    Product existingProduct = productDao.getProductById(productId);
-	    if (existingProduct != null && existingProduct.getFile() != null) {
-	        product.setFile(existingProduct.getFile());
-	    } else {
-	        // 기존 이미지 정보가 없는 경우 기본 이미지 경로 설정 또는 처리
-	        product.setFile("/static/img/no-image.jpg");
-	    }
-	} else {
-	    // 새로운 파일 경로 설정
-	    product.setFile("/static/img/" + fileName);
-	}
-	
-	int result = productDao.update(product);
+
+	int result = productDao.insert(product);
 		
     if (result > 0) {
-        out.println("<script>alert('상품이 성공적으로 수정되었습니다.');location.href='editProducts.jsp';</script>");
+        out.println("<script>alert('상품이 성공적으로 등록되었습니다.');location.href='editProducts.jsp';</script>");
     } else {
         out.println("<script>alert('상품 수정에 실패했습니다.');history.back();</script>");
     }
-    
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
