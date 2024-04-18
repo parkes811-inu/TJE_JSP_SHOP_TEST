@@ -21,7 +21,7 @@
 		response.sendRedirect("editProducts.jsp");
 	}
 	else {
-	    out.println("<script>alert('회원 삭제 중 에러가 발생하였습니다.'); history.back();</script>");
+	    out.println("<script>alert('제품 삭제 중 에러가 발생하였습니다.'); history.back();</script>");
 	}
 	
 %>

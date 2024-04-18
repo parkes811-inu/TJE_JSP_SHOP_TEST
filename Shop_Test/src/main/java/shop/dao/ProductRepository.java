@@ -52,7 +52,45 @@ public class ProductRepository extends JDBConnection {
 	 * @return
 	 */
 	public List<Product> list(String keyword) {
+		List<Product> productList = new ArrayList<Product>();
 		
+		String sql = " SELECT * "
+					+ " FROM product "
+					+ " WHERE name LIKE ? "
+					+ " OR description LIKE ? "
+					+ " OR manufacturer LIKE ? "
+					+ " OR category LIKE ? ";
+		
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setString(1, "%" + keyword + "%");
+		    psmt.setString(2, "%" + keyword + "%");
+		    psmt.setString(3, "%" + keyword + "%");
+		    psmt.setString(4, "%" + keyword + "%");
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				
+	            Product product = new Product();
+	            
+	            product.setProductId(rs.getString("product_id"));
+	            product.setName(rs.getString("name"));
+	            product.setUnitPrice(rs.getInt("unit_price"));
+	            product.setDescription(rs.getString("description"));
+	            product.setManufacturer(rs.getString("manufacturer"));
+	            product.setCategory(rs.getString("category"));
+	            product.setUnitsInStock(rs.getLong("units_in_stock"));
+	            product.setCondition(rs.getString("condition"));
+	            product.setFile(rs.getString("file"));
+	            product.setQuantity(rs.getInt("quantity"));
+
+				productList.add(product); 
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("주문 목록 조회 중 에러가 발생하였습니다.");
+		}
+		return productList;
 	}
 	
 	/**
@@ -109,9 +147,47 @@ public class ProductRepository extends JDBConnection {
 	 * @return
 	 */
 	public int update(Product product) {
-		
+		int result = 0;
+		String sql = " UPDATE product "
+				+ " SET file = ? "
+				+ " , product_id = ?"
+				+ " , name = ? "
+				+ " , unit_price = ? "
+				+ " , description = ? "
+				+ " , manufacturer = ? "
+				+ " , category = ? "
+				+ " , units_in_stock = ? "
+				+ " , `condition` = ? "
+				+ " WHERE product_id = ? ";
+
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setString(1, product.getFile());
+			psmt.setString(2, product.getProductId());
+			psmt.setString(3, product.getName());
+			//psmt.setInt(4, product.getUnitPrice());
+			psmt.setInt(4, 20000);
+			psmt.setString(5, product.getDescription());
+			psmt.setString(6, product.getManufacturer());
+			psmt.setString(7, product.getCategory());
+			//psmt.setLong(8, product.getUnitsInStock());
+			psmt.setLong(8, 100);
+			psmt.setString(9, product.getCondition());
+			psmt.setString(10, product.getProductId());
+			// psmt.setString(11, product.getName());
+
+			result = psmt.executeUpdate();
+			
+			if(result > 0) {
+	            return result;
+			} 
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("상품 수정123 중 에러가 발생하였습니다.");
+		}
+			return result;
 	}
-	
 	
 	
 	/**
@@ -139,7 +215,7 @@ public class ProductRepository extends JDBConnection {
 		e.printStackTrace();
 		System.err.println("상품 삭제 중 에러가 발생하였습니다.");
 	}
-	return result;
+		return result;
 	}
 
 }

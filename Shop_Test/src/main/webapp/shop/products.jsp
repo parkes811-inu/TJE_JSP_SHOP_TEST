@@ -17,12 +17,27 @@
 </head>
 <% 
 	String root = request.getContextPath(); 
-
-	// 데이터 베이스에서 상품 목록 가져와서 그리드로 뿌려야될듯
-	List<Product> productList = new ArrayList<Product>();
 	ProductRepository productDao = new ProductRepository();
+	List<Product> productList = new ArrayList<Product>();
 	
-	productList = productDao.list();
+	//상단 검색 메뉴
+	String keyword = request.getParameter("keyword");
+	
+	// keyword가 널이면 그냥 전체 상품 보여주고, 아니면 keyword로 조회한거 보여주면 될듯 ??
+	if(keyword != null && !keyword.trim().isEmpty()) {
+		productList = productDao.list(keyword);
+		
+		// 제품들 정보 이외 이상한 값들이 들어가면 그냥 전체 조회 ?
+		if(productList.size() == 0) {
+			productList = productDao.list();
+		}
+
+	} else {
+		productList = productDao.list();
+	}
+	
+	// 데이터 베이스에서 상품 목록 가져와서 그리드로 뿌려야될듯
+	// response.?????
 %>
 <body>   
 	<jsp:include page="/layout/header.jsp" />
