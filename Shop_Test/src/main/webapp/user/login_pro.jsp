@@ -71,6 +71,8 @@
 	
 	if (loginUser != null) {
 	    session.setAttribute("loginId", id);  // 로그인 성공 시 세션에 ID 저장
+	    session.setAttribute("cartList", null); // 로그인 시 기존 담겨있던 장바구니 초기화
+
 	    response.sendRedirect("complete.jsp?msg=0");  // 성공 페이지로 리다이렉션
 	} else {
     	response.sendRedirect("login.jsp?error=0");  // 로그인 실패 시 에러 코드와 함께 리다이렉션

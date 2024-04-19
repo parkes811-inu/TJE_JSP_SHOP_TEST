@@ -12,9 +12,9 @@
 </head>
 <%
     String productId = request.getParameter("productId");
-    List<Product> cart = (List<Product>) session.getAttribute("cart");
-
-    if (cart == null) {
+    List<Product> cartList = (List<Product>) session.getAttribute("cartList");
+	
+    if (cartList == null) {
         response.sendRedirect("/error/exception.jsp");
         return;
     }
@@ -24,22 +24,22 @@
     if (productId != null && !productId.isEmpty()) {
         // productId가 제공된 경우 특정 상품 삭제
         Product toRemove = null;
-        for (Product product : cart) {
+        for (Product product : cartList) {
             if (product.getProductId().equals(productId)) {
                 toRemove = product;
                 break;
             }
         }
         if (toRemove != null) {
-            result = cart.remove(toRemove);
+            result = cartList.remove(toRemove);
         }
     } else {
         // productId가 제공되지 않은 경우 전체 목록 삭제
-        cart.clear();
-        result = cart.isEmpty();
+        cartList.clear();
+        result = cartList.isEmpty();
     }
 
-    session.setAttribute("cart", cart); // 변경된 장바구니를 다시 세션에 저장
+    session.setAttribute("cartList", cartList); // 변경된 장바구니를 다시 세션에 저장
 
     if (result) {
         response.sendRedirect("cart.jsp");

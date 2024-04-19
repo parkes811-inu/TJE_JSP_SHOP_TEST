@@ -10,9 +10,15 @@
 	<jsp:include page="/layout/meta.jsp" /> <jsp:include page="/layout/link.jsp" />
 </head>
 <%
-	// 로그인 정보 받아와서 비회원인지 회원인지
+	// 로그인 정보 받아와서 비회원인지 회원인지 check
+	String loginId = (String) session.getAttribute("loginId");
+
+	boolean checkLogin = false;
 	
-	
+	if(loginId != null) {
+		checkLogin = true;	
+	}
+
 	String name = request.getParameter("name");
 	String deliveryDate = request.getParameter("deliveryDate");
 	String nation = request.getParameter("nation");
@@ -20,9 +26,10 @@
 	String address = request.getParameter("address");
  	String phone = request.getParameter("phone");
  	
-    List<Product> cart = (List<Product>) session.getAttribute("cart");
+ 	
+    List<Product> cartList = (List<Product>) session.getAttribute("cartList");
 
-    if (cart == null) {
+    if (cartList == null) {
         response.sendRedirect("/error/exception.jsp");
     }
     
@@ -37,52 +44,104 @@
 	
 	<!-- 배송 정보 영역 -->
 	<div class="container shop p-5 mb-5" >
-		<form action="order.jsp" name="DeliveryForm" method="post" >
+		<form action="complete.jsp" name="DeliveryForm" method="post" >
+		<div class="input-group mb-3 row">
+			<p> 주문 형태 : &nbsp; &nbsp; &nbsp; &nbsp; 
+				<%= checkLogin ? "회원 주문" : "비회원 주문" %> </p> <hr>
+		</div>
 		
-			<div class="input-group mb-3 row">
-				<label class="input-group-text col-md-4" id="">성명 : </label>
-				<p> 성명 : <%= name %> </p> <hr>
-			</div>
-			
-			<div class="input-group mb-3 row">
-				<p> 배송일 : <%= deliveryDate %> </p> <hr>
-			</div>
-			
-			<div class="input-group mb-3 row">
-				<p> 국가명 : <%= nation %> </p> <hr>
-			</div>
-			
-			<div class="input-group mb-3 row">
-			    <p> 우편번호 : <%= zipCode %> </p> <hr>
-			</div>
-			
-			<div class="input-group mb-3 row">
-				<p> 주소 : <%= address %> </p> <hr>
-			</div>
-			
-			<div class="input-group mb-6 row">
-			    <p> 전화번호 : <%= phone %> </p> <hr>
-			</div>
-			 <hr>
-			<div class="input-group mb-3 row">
-				<label class="col-md-4" id="">주문 비밀번호 : </label>
-				<input type="text" class="form-control col-md-8" 
-					   name="password" required>
-			</div>
-			
+		<div class="input-group mb-3 row">
+			<p> 성명 : &nbsp; &nbsp; &nbsp; &nbsp; <%= name %> </p> <hr>
+		</div>
+		
+		<div class="input-group mb-3 row">
+			<p> 배송일 : &nbsp; &nbsp; &nbsp; &nbsp; <%= deliveryDate %> </p> <hr>
+		</div>
+		
+		<div class="input-group mb-3 row">
+			<p> 국가명 : &nbsp; &nbsp; &nbsp; &nbsp; <%= nation %> </p> <hr>
+		</div>
+		
+		<div class="input-group mb-3 row">
+		    <p> 우편번호 : &nbsp; &nbsp; &nbsp; &nbsp; <%= zipCode %> </p> <hr>
+		</div>
+		
+		<div class="input-group mb-3 row">
+			<p> 주소 : &nbsp; &nbsp; &nbsp; &nbsp; <%= address %> </p> <hr>
+		</div>
+		
+		<div class="input-group mb-6 row">
+		    <p> 전화번호 : &nbsp; &nbsp; &nbsp; &nbsp; <%= phone %> </p> <hr>
+		</div>
+		<%
+		 if(!checkLogin) {
+		%>
+		<div class="input-group mb-3 row">
+			<label class="col-md-4" id="">주문 비밀번호 : </label>
+			<input type="text" class="form-control col-md-8" 
+				   name="password" required>
+		</div>
+		<% } %>
+		<!-- 배송 정보 전달을 위한 hidden 타입 -->	
+		<input type="hidden" name="name" value="<%= name %>">
+		<input type="hidden" name="deliveryDate" value="<%= deliveryDate %>">
+		<input type="hidden" name="nation" value="<%= nation %>">
+		<input type="hidden" name="zipCode" value="<%= zipCode %>">
+		<input type="hidden" name="address" value="<%= address %>">
+		<input type="hidden" name="phone" value="<%= phone %>">
+		
+		<div class="container mt-5">
+		    <!-- 장바구니 상품 목록 -->
+		    <table class="table table-striped table-hover table-bordered text-center align-middle">
+		        <thead class="table-primary">
+		            <tr>
+		                <th>상품</th>
+		                <th>가격</th>
+		                <th>수량</th>
+		                <th>소계</th>
+		                <th>비고</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <% if (cartList != null && !cartList.isEmpty()) {
+		                int sum = 0;
+		                for (Product product : cartList) {
+		                    int total = product.getUnitPrice() * product.getQuantity();
+		                    sum += total;
+		            %>
+		            <tr>
+		                <td><%= product.getName() %></td>
+		                <td><%= product.getUnitPrice() %></td>
+		                <td><%= product.getQuantity() %></td>
+		                <td><%= total %></td>
+		                <td></td>
+		            </tr>
+		            <% }
+		            %>
+		            <tr>
+		                <td colspan="3">총액</td>
+		                <td><%= sum %></td>
+		                <td></td>
+		            </tr>
+		            <% } else { %>
+		            <tr>
+		                <td colspan="5">장바구니에 담긴 상품이 없습니다.</td>
+		            </tr>
+		            <% } %>
+		        </tbody>
+		    </table>
+		</div>
 			<div class="d-md-flex justify-content-between mt-5 mb-5">
 			    <!-- 왼쪽 버튼 -->
 			    <div>
-			        <a href="cart.jsp" class="btn btn-lg btn-success">이전</a>
+			        <a href="ship.jsp" class="btn btn-lg btn-success">이전</a>
 			        <a href="/Shop_Test/" class="btn btn-lg btn-danger">취소</a>
 			    </div>
 			    <!-- 오른쪽 버튼 -->
 			    <div>
-			        <input type="submit" class="btn btn-lg btn-primary" value="등록" />
+			        <input type="submit" class="btn btn-lg btn-primary" value="주문완료" />
 			    </div>
 			</div>
-
-			
 		</form>
 	</div>
 	<jsp:include page="/layout/footer.jsp" />

@@ -10,6 +10,7 @@
 </head>
 <body>   
 	<% 
+		
 		String root = request.getContextPath();
 		String error = request.getParameter("error");
 		

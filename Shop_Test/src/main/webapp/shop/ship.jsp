@@ -26,7 +26,7 @@
 			
 			<div class="input-group mb-3 row">
 				<label class="input-group-text col-md-4" id="">배송일</label>
-				<input type="date" class="form-control col-md-8" 
+				<input type="text" class="form-control col-md-8" 
 					   name="deliveryDate" required>
 			</div>
 			

@@ -20,21 +20,32 @@
 	
 	ProductRepository productDao = new ProductRepository();
    // 세션에 상품 리스트를 관리하는 'cart' 속성이 있는지 확인
-    List<Product> cart = (List<Product>) session.getAttribute("cart");
+    List<Product> cartList = (List<Product>) session.getAttribute("cartList");
    
-	if (productId != null) {
-	    // 상품 정보를 조회
-	    Product product = productDao.getProductById(productId);
-	    if (product != null) {
-	        if (cart == null) {
-	            // 처음으로 상품을 추가하는 경우, 'cart' 속성을 새로 생성
-	            cart = new ArrayList<Product>();
-	            session.setAttribute("cart", cart);
-	        }
-	        // 상품을 장바구니에 추가
-	        cart.add(product);
-	        // 사용자를 장바구니 페이지로 리디렉트
-	        response.sendRedirect("cart.jsp");
+    if (productId != null) {
+        // 상품 정보를 조회
+        Product product = productDao.getProductById(productId);
+        if (product != null) {
+            if (cartList == null) {
+                // 처음으로 상품을 추가하는 경우, 'cart' 속성을 새로 생성
+                cartList = new ArrayList<Product>();
+                session.setAttribute("cartList", cartList);
+            }
+            boolean duplicate = false;
+            for (Product item : cartList) {
+                if (item.getProductId().equals(productId)) {  // 상품 ID를 이용한 중복 확인
+                    duplicate = true;
+                    item.setQuantity(item.getQuantity() + 1);  // 해당 상품의 수량만 증가
+                    break;  // 중복을 찾았으므로 루프 탈출
+                }
+            }
+            
+            if (!duplicate) {
+                product.setQuantity(1);  // 새 상품이면 수량을 1로 설정
+                cartList.add(product);
+            }
+            // 사용자를 장바구니 페이지로 리디렉트
+            response.sendRedirect("products.jsp");
 	    } else {
 	        // 상품이 존재하지 않는 경우, 오류 처리
 	        response.sendRedirect("error.jsp");
@@ -62,9 +73,9 @@
 			            </tr>
 			        </thead>
 			        <tbody>
-			            <% if (cart != null && !cart.isEmpty()) {
+			            <% if (cartList != null && !cartList.isEmpty()) {
 			                int sum = 0;
-			                for (Product product : cart) {
+			                for (Product product : cartList) {
 			                    int total = product.getUnitPrice() * product.getQuantity();
 			                    sum += total;
 			            %>
@@ -110,7 +121,7 @@
     </div>
     <script>
         function checkCart() {
-            var isCartEmpty = <%= cart == null || cart.isEmpty() %>;
+            var isCartEmpty = <%= cartList == null || cartList.isEmpty() %>;
             if (isCartEmpty) {
                 alert('장바구니에 담긴 상품이 없습니다.');
                 return false;
