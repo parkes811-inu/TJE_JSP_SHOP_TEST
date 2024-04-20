@@ -77,9 +77,13 @@ public class OrderRepository extends JDBConnection {
 	public List<Product> list(String userId) {
 		List<Product> productList = new ArrayList<>();
 		
-		String sql = " SELECT * "
-					+ " FROM `order` "
-					+ " WHERE user_id = ? ";
+		String sql = " SELECT pio.order_no AS order_no, p.name AS name, p.unit_price AS unit_price, "
+		           + " pio.amount AS amount, "
+		           + " (p.unit_price * pio.amount) AS total_price "
+		           + " FROM `product_io` pio, `order` o, `product` p "
+		           + " WHERE pio.order_no = o.order_no "
+		           + " AND p.product_id = pio.product_id "
+		           + " AND pio.user_id = ? ";  
 		
 		try {
 			psmt = con.prepareStatement(sql);
@@ -91,16 +95,14 @@ public class OrderRepository extends JDBConnection {
 				
 	            Product product = new Product();
 	            product.setOrderNo(rs.getInt("order_no"));
-	            // product.setName(rs.getString("name"));
-	            product.setUnitPrice(rs.getInt("total_price"));
-	            
-	            //String sql2 = ""
-	        	
+	            product.setName(rs.getString("name"));
+	            product.setUnitPrice(rs.getInt("unit_price"));
+	            product.setQuantity(rs.getInt("amount"));
 				productList.add(product); 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("주문 목록 조회 중 에러가 발생하였습니다.");
+			System.err.println("주문 내역 조회 중 에러가 발생하였습니다.");
 		}
 				
 		return productList;
@@ -114,12 +116,16 @@ public class OrderRepository extends JDBConnection {
 	 */
 	public List<Product> list(String phone, String orderPw) {
 		
-	List<Product> productList = new ArrayList<>();
+		List<Product> productList = new ArrayList<>();
 		
-		String sql = " SELECT * "
-					+ " FROM `order` "
-					+ " WHERE phone = ? "
-					+ " AND order_pw = ? ";
+		String sql = " SELECT pio.order_no AS order_no, p.name AS name, p.unit_price AS unit_price, "
+		           + " pio.amount AS amount, "
+		           + " (p.unit_price * pio.amount) AS total_price "
+		           + " FROM `product_io` pio, `order` o, `product` p "
+		           + " WHERE pio.order_no = o.order_no "
+		           + " AND p.product_id = pio.product_id "
+		           + " AND o.phone = ? "
+		           + " AND o.order_pw = ? ";  
 		
 		try {
 			psmt = con.prepareStatement(sql);
@@ -132,19 +138,18 @@ public class OrderRepository extends JDBConnection {
 				
 	            Product product = new Product();
 	            product.setOrderNo(rs.getInt("order_no"));
-	            // product.setName(rs.getString("name"));
-	            product.setUnitPrice(rs.getInt("total_price"));
-
-	        	
+	            product.setName(rs.getString("name"));
+	            product.setUnitPrice(rs.getInt("unit_price"));
+	            product.setQuantity(rs.getInt("amount"));
 				productList.add(product); 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("주문 목록 조회 중 에러가 발생하였습니다.");
+			System.err.println("주문 내역 조회 중 에러가 발생하였습니다.");
 		}
+				
 		return productList;
-	}
-	
+	}	
 }
 
 

@@ -25,15 +25,14 @@
 	String zipCode = request.getParameter("zipCode");
 	String address = request.getParameter("address");
  	String phone = request.getParameter("phone");
- 	
- 	
+ 	int total = 0;
+ 	int sum = 0;
+ 	String orderForm = "비회원 주문";
     List<Product> cartList = (List<Product>) session.getAttribute("cartList");
 
     if (cartList == null) {
         response.sendRedirect("/error/exception.jsp");
     }
-    
-    
 %>
 <body>   
 	
@@ -46,8 +45,16 @@
 	<div class="container shop p-5 mb-5" >
 		<form action="complete.jsp" name="DeliveryForm" method="post" >
 		<div class="input-group mb-3 row">
+			<%
+			if(checkLogin) {
+				orderForm = "회원 주문";
+			} else {
+				orderForm = "비회원 주문";
+			}
+			
+			%>
 			<p> 주문 형태 : &nbsp; &nbsp; &nbsp; &nbsp; 
-				<%= checkLogin ? "회원 주문" : "비회원 주문" %> </p> <hr>
+				<%= orderForm %> </p> <hr>
 		</div>
 		
 		<div class="input-group mb-3 row">
@@ -77,18 +84,11 @@
 		 if(!checkLogin) {
 		%>
 		<div class="input-group mb-3 row">
-			<label class="col-md-4" id="">주문 비밀번호 : </label>
+			<label class="col-md-3" id="">주문 비밀번호 : </label>
 			<input type="text" class="form-control col-md-8" 
 				   name="password" required>
 		</div>
 		<% } %>
-		<!-- 배송 정보 전달을 위한 hidden 타입 -->	
-		<input type="hidden" name="name" value="<%= name %>">
-		<input type="hidden" name="deliveryDate" value="<%= deliveryDate %>">
-		<input type="hidden" name="nation" value="<%= nation %>">
-		<input type="hidden" name="zipCode" value="<%= zipCode %>">
-		<input type="hidden" name="address" value="<%= address %>">
-		<input type="hidden" name="phone" value="<%= phone %>">
 		
 		<div class="container mt-5">
 		    <!-- 장바구니 상품 목록 -->
@@ -104,9 +104,9 @@
 		        </thead>
 		        <tbody>
 		            <% if (cartList != null && !cartList.isEmpty()) {
-		                int sum = 0;
+		                
 		                for (Product product : cartList) {
-		                    int total = product.getUnitPrice() * product.getQuantity();
+		                    total = product.getUnitPrice() * product.getQuantity();
 		                    sum += total;
 		            %>
 		            <tr>
@@ -130,6 +130,16 @@
 		            <% } %>
 		        </tbody>
 		    </table>
+	    <!-- 배송 정보 전달을 위한 hidden 타입 -->	
+		<input type="hidden" name="orderForm" value="<%= orderForm %>">
+		<input type="hidden" name="name" value="<%= name %>">
+		<input type="hidden" name="deliveryDate" value="<%= deliveryDate %>">
+		<input type="hidden" name="nation" value="<%= nation %>">
+		<input type="hidden" name="zipCode" value="<%= zipCode %>">
+		<input type="hidden" name="address" value="<%= address %>">
+		<input type="hidden" name="phone" value="<%= phone %>">
+		<input type="hidden" name="sum" value="<%= sum %>">
+		
 		</div>
 			<div class="d-md-flex justify-content-between mt-5 mb-5">
 			    <!-- 왼쪽 버튼 -->

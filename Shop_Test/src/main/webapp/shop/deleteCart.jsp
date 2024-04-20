@@ -25,7 +25,8 @@
         // productId가 제공된 경우 특정 상품 삭제
         Product toRemove = null;
         for (Product product : cartList) {
-            if (product.getProductId().equals(productId)) {
+            // product의 productId가 null이 아니고, 요청받은 productId와 일치하는 경우만 검사
+            if (product.getProductId() != null && product.getProductId().equals(productId)) {
                 toRemove = product;
                 break;
             }

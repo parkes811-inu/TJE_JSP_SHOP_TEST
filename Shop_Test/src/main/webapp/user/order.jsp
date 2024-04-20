@@ -123,7 +123,6 @@
 						<%	
 							OrderRepository orderDao = new OrderRepository();
 							
-							// To-do : 2024-04-16 : list 조회를 어떻게 하라는지 이해가 안감...
 							int orderCount = 0;
 							List<Product> orderList = new ArrayList<Product>();
 							

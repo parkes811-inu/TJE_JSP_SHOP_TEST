@@ -76,7 +76,9 @@
 			            <% if (cartList != null && !cartList.isEmpty()) {
 			                int sum = 0;
 			                for (Product product : cartList) {
-			                    int total = product.getUnitPrice() * product.getQuantity();
+			                	int unitPrice = product.getUnitPrice() == null ? 0 : product.getUnitPrice();
+			                	
+			                    int total = unitPrice * product.getQuantity();
 			                    sum += total;
 			            %>
 			            <tr>

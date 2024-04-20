@@ -27,7 +27,7 @@
      	session.setAttribute("orderPw", orderPw);
         response.sendRedirect(root + "/user/order.jsp");
     } else {
-	    out.println("<script>alert('해당 정보로 조회되지 않습니다.'); history.back();</script>");
+	    response.sendRedirect(root + "/user/order.jsp");
     }
 
 %>

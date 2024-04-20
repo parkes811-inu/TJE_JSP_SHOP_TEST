@@ -50,7 +50,7 @@
 			    </div>
 			    <div class="d-grid gap-4 d-sm-flex justify-content-sm-end">
 					<a href="<%= root %>/shop/cart.jsp" class="btn btn-warning btn-lg px-3 gap-2">장바구니</a>
-					<a href="<%= root %>/shop/cart_pro.jsp" class="btn btn-success btn-lg px-3 gap-2">주문하기</a>
+					<a href="<%= root %>/shop/cart_pro.jsp?productId=<%= productId %>" class="btn btn-success btn-lg px-3 gap-2">주문하기</a>
 				</div>
 			</div>
         </div>
