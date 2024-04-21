@@ -1,3 +1,4 @@
+<%@page import="shop.dao.ProductIORepository"%>
 <%@page import="org.apache.commons.io.FilenameUtils"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
@@ -22,6 +23,8 @@
 <title>Insert title here</title>
 </head>
 <%
+	String loginId = (String) session.getAttribute("loginId");
+	
 	//파일 저장 경로 및 크기 설정
 	String saveDirectory = application.getRealPath("/static/img");
 	int maxPostSize = 10 * 1024 * 1024;  // 최대 10 MB
@@ -76,9 +79,20 @@
     product.setFile("/static/img/" + fileName);
     
 	ProductRepository productDao = new ProductRepository();
-
+	ProductIORepository productIODao = new ProductIORepository();
+	
 	int result = productDao.insert(product);
-		
+	
+	// productIO 테이블에 상품 등록 시 초기 정보 추가
+	if(loginId == null) {
+		product.setUserId("비회원");
+	} else {
+		product.setUserId(loginId);
+	}
+	product.setQuantity((int) unitsInStock);
+	product.setType("IN");
+	int productIO = productIODao.insert(product);
+	
     if (result > 0) {
         out.println("<script>alert('상품이 성공적으로 등록되었습니다.');location.href='editProducts.jsp';</script>");
     } else {
